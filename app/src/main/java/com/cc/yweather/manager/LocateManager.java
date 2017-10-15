@@ -111,7 +111,7 @@ public class LocateManager {
                 sb.append("* WIFI开关：").append(location.getLocationQualityReport().isWifiAble() ? "开启" : "关闭").append("\n");
                 sb.append("* GPS星数：").append(location.getLocationQualityReport().getGPSSatellites()).append("\n");
                 sb.append("****************").append("\n");
-//                Log.i("onLocationChanged", sb.toString());
+                Log.i("onLocationChanged", sb.toString());
             } else {
                 // 定位失败
                 Log.i("onLocationChanged", "location == null");
