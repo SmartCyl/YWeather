@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Y天气</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <!--DrawerMenu-->
+    <string name="city_manager">城市管理</string>
+    <string name="theme_skin">主题皮肤</string>
+    <string name="app_settings">应用设置</string>
+    <string name="share_weather">分享天气</string>
+    <string name="tools">小工具</string>
+    <string name="bg_preview">动态背景预览</string>
+    <string name="about">关于</string>
+
+    <!--应用设置-->
+    <string name="settings_notification_on">启动通知栏</string>
+    <string name="settings_notification">通知栏</string>
+    <string name="settings_weather_warning">天气预警通知</string>
+    <string name="settings_self_define">自定义</string>
+    <string name="settings_show_life">显示生活指数信息</string>
+    <string name="settings_others">其他</string>
+    <string name="settings_auto_location">自动定位</string>
+    <string name="settings_check_latest_version">启动应用检查版本更新</string>
+
+    <!--城市管理-->
+    <string name="modify_skin">换肤</string>
+</resources>
