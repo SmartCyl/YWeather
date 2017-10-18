@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 
+import com.cc.yweather.ui.activity.AboutActivity;
+import com.cc.yweather.ui.activity.CityManagerActivity;
+import com.cc.yweather.ui.activity.SettingsActivity;
+import com.cc.yweather.ui.activity.ToolListActivity;
+
 /**
  * Created by CC on 2017/7/13.
  */
@@ -28,5 +33,28 @@ public class IntentUtils {
         ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(context);
         Intent intent = new Intent(context, clazz);
         ActivityCompat.startActivity(context, intent, compat.toBundle());
+    }
+
+    public static void intent(Activity context, int position) {
+        switch (position) {
+            case 0:
+                intent2ActivityAnimation(context, CityManagerActivity.class);
+                break;
+            case 1:
+                break;
+            case 2:
+                intent2ActivityAnimation(context, SettingsActivity.class);
+                break;
+            case 3:
+                break;
+            case 4:
+                intent2Activity(context, ToolListActivity.class);
+                break;
+            case 5:
+                break;
+            case 6:
+                intent2ActivityAnimation(context, AboutActivity.class);
+                break;
+        }
     }
 }

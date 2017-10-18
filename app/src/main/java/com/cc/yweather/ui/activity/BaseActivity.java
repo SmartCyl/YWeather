@@ -1,6 +1,7 @@
 package com.cc.yweather.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.Window;
 
 import com.cc.yweather.R;
-import com.cc.yweather.mvp.presenter.impl.BasePresenterImpl;
 import com.gyf.barlibrary.ImmersionBar;
 
 /**
@@ -21,7 +21,6 @@ import com.gyf.barlibrary.ImmersionBar;
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener {
     protected Toolbar toolbar;
-    BasePresenterImpl mBasePresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     @SuppressLint("InlinedApi")
     protected void setEnterTransition(int res) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return;
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         Transition transition = TransitionInflater.from(this).inflateTransition(res);
         getWindow().setEnterTransition(transition);

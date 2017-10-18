@@ -1,13 +1,14 @@
-package com.cc.yweather.mvp.model;
+package com.cc.yweather.database.bean;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.List;
 
 /**
- * Created by CC on 2017/7/21.
+ * Created by CC on 2017/10/16.
  */
 
-public class WeatherInfo {
-
+public class Weather extends DataSupport {
     /**
      * showapi_res_code : 0
      * showapi_res_error :

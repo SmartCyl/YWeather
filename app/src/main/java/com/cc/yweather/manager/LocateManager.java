@@ -9,6 +9,9 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.cc.yweather.eventbus.LocateEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,10 +25,8 @@ public class LocateManager {
     private volatile static LocateManager sManager;
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
-    private Context mContext;
 
     private LocateManager(Context context) {
-        mContext = context;
         //初始化client
         locationClient = new AMapLocationClient(context.getApplicationContext());
         locationOption = getDefaultOption();
@@ -51,7 +52,7 @@ public class LocateManager {
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
         mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
         mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
-        mOption.setInterval(10000);//可选，设置定位间隔。默认为2秒
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
         mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
         mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
         mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
@@ -70,16 +71,8 @@ public class LocateManager {
                 StringBuilder sb = new StringBuilder();
                 //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
                 if (location.getErrorCode() == 0) {
+                    EventBus.getDefault().postSticky(new LocateEvent(location));
                     stopLocation();
-                    Address address = getAddressFromLat(location.getLatitude(), location.getLongitude());
-                    if (address != null) {
-                        Log.i("onLocationChanged", address.getAdminArea() + "\n" + // 江西省
-                                address.getCountryName() + "\n" + address.getFeatureName() + "\n" + // 中国  null
-                                address.getLocality() + "\n" + address.getPhone() + "\n" + // 南昌市 null
-                                address.getSubAdminArea() + "\n" + address.getSubLocality() + "\n" + // null 青山湖区
-                                address.getThoroughfare() + "\n" + address.getSubThoroughfare() + "\n" + // 火炬大街 null
-                                address.getUrl()); // null
-                    }
                     sb.append("定位成功" + "\n");
                     sb.append("定位类型: " + location.getLocationType() + "\n");
                     sb.append("经    度    : " + location.getLongitude() + "\n");
@@ -146,12 +139,13 @@ public class LocateManager {
             locationClient.onDestroy();
             locationClient = null;
             locationOption = null;
+            sManager = null;
         }
     }
 
     // 根据经纬度获取城市名
-    private Address getAddressFromLat(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+    public Address getAddressFromLat(Context context, double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
         List<Address> fromLocation = null;
         try {
             fromLocation = geocoder.getFromLocation(latitude, longitude, 1);

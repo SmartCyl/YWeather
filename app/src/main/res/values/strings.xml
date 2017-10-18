@@ -26,4 +26,8 @@
 
     <!--城市管理-->
     <string name="modify_skin">换肤</string>
+
+    <!-- Launch页 -->
+    <string name="copyright">Designed By CoderCyl</string>
+    <string name="short_intro">让出行更轻松</string>
 </resources>

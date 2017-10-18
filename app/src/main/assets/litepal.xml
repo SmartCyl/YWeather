@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="weather"/>
+
+    <version value="2"/>
+    <storage value="YWeather/database"/>
+
+    <list>
+        <mapping class="com.cc.yweather.database.bean.Weather"/>
+        <mapping class="com.cc.yweather.database.bean.CurrentCity"/>
+    </list>
+</litepal>
