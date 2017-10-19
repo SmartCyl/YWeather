@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -22,13 +23,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cc.yweather.R;
 import com.cc.yweather.app.Constance;
+import com.cc.yweather.database.bean.FocusCities;
 import com.cc.yweather.database.bean.Weather;
 import com.cc.yweather.database.controller.CityController;
-import com.cc.yweather.eventbus.LocateEvent;
+import com.cc.yweather.eventbus.BusCase;
+import com.cc.yweather.eventbus.WeatherEvent;
 import com.cc.yweather.inter.OnItemClickListener;
 import com.cc.yweather.inter.OnPermissionResultListener;
 import com.cc.yweather.manager.LocateManager;
@@ -69,6 +73,8 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
     LinearLayout llIndicator;
     @BindView(R.id.rv_drawer_menu)
     RecyclerView rvDrawerMenu;
+    @BindView(R.id.tv_area)
+    TextView tvArea;
 
     private WeatherPagerAdapter pagerAdapter;
     private IWeatherPresenter mIWeatherPresenter;
@@ -102,6 +108,10 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
             //去除默认Title显示
             actionBar.setDisplayShowTitleEnabled(false);
         }
+
+        String currentArea = CityController.getController().getCurrentCity().getArea();
+        if (!TextUtils.isEmpty(currentArea)) tvArea.setText(currentArea);
+        else tvArea.setText("未知地区");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -231,15 +241,40 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
         mDisposable = d;
     }
 
+    // 定位成功
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void getLocation(LocateEvent event) {
+    public void getLocation(WeatherEvent event) {
         double longitude = event.getAMapLocation().getLongitude(); // 经度
         double latitude = event.getAMapLocation().getLatitude(); // 纬度
         mIWeatherPresenter.getWeather(Constance.APP_ID, Constance.SIGN, "5", String.valueOf(longitude),
                 String.valueOf(latitude), "1", "1", "0", "1");
 
+        // 经纬度转换成地址并保存
         Address address = LocateManager.getInstance(this).getAddressFromLat(this, latitude, longitude);
-        if (address != null) CityController.getController().saveCurrentCity(address);
+        // 数据库中保存的当前地址
+        FocusCities currentCity = CityController.getController().getCurrentCity();
+        // 如果定位的地址与数据库的地址不一致则提示
+        if (address != null && currentCity != null) {
+            String locateArea = address.getSubLocality();
+            String currArea = currentCity.getArea();
+            if (locateArea != null && currArea != null) {
+                if (!locateArea.equals(currArea)) {
+                    // 提示是否切换
+                    CityController.getController().saveCity(address.getAdminArea(), address.getLocality(), address.getSubLocality(), true);
+                    Log.i("getLocation", currentCity.getProvince() + " " + currentCity.getCity() + " " + currentCity.getArea() + " " +
+                            currentCity.isCurrent() + " " + currentCity.getId());
+                }
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void observer(BusCase busCase) {
+        switch (busCase) {
+            case LOCATE_TIMEOUT:
+                Toast.makeText(this, "定位失败，请点击右上角\"+\"号手动添加城市", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override

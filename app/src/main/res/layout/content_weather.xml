@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.cc.yweather.ui.activity.WeatherActivity"
-    tools:showIn="@layout/app_bar_weather">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                tools:context="com.cc.yweather.ui.activity.WeatherActivity"
+                tools:showIn="@layout/app_bar_weather">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -22,14 +22,14 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <TextView
+            android:id="@+id/tv_area"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="北京"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
@@ -45,7 +45,7 @@
             android:padding="10dp"
             android:text="2017-07-13"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <LinearLayout
             android:id="@+id/ll_indicator"
@@ -53,7 +53,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
             android:padding="10dp"
             android:text="21:17发布"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
     </RelativeLayout>
 
     <android.support.v4.view.ViewPager
@@ -71,5 +71,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/ll_bottom"
-        android:layout_below="@id/toolbar" />
+        android:layout_below="@id/toolbar"/>
 </RelativeLayout>
