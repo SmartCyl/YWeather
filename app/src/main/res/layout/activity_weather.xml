@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorPrimary"/>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/content_weather" />
+        <include layout="@layout/content_weather"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/nav_night" />
+                    android:src="@mipmap/nav_night"/>
 
                 <TextView
                     android:id="@+id/tv_date"
@@ -42,7 +43,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="25dp"
                     android:textColor="#bbffffff"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"/>
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -51,7 +52,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:divider="@null"
-                android:scrollbars="none" />
+                android:scrollbars="none"/>
         </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
 

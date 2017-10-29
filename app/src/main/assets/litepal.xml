@@ -2,11 +2,13 @@
 <litepal>
     <dbname value="weather"/>
 
-    <version value="3"/>
+    <version value="12"/>
     <!--<storage value="YWeather/database"/>-->
 
     <list>
         <mapping class="com.cc.yweather.database.bean.Weather"/>
+        <mapping class="com.cc.yweather.database.bean.Future"/>
+        <mapping class="com.cc.yweather.database.bean.ThreeHourForecast"/>
         <mapping class="com.cc.yweather.database.bean.FocusCities"/>
     </list>
 </litepal>

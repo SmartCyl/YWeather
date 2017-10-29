@@ -17,6 +17,6 @@ public interface WeatherApi {
             @Query("showapi_sign") String sign,
             @Query("from") String from, @Query("lng") String lng,
             @Query("lat") String lat, @Query("needMoreDay") String moreDay,
-            @Query("needIndex") String index, @Query("needHourData") String hourData,
+            @Query("needIndex") String index, @Query("need3HourForcast") String hourData,
             @Query("needAlarm") String alarm);
 }

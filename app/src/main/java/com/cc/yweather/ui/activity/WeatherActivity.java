@@ -29,8 +29,8 @@ import android.widget.Toast;
 import com.cc.yweather.R;
 import com.cc.yweather.app.Constance;
 import com.cc.yweather.database.bean.FocusCities;
-import com.cc.yweather.database.bean.Weather;
 import com.cc.yweather.database.controller.CityController;
+import com.cc.yweather.database.controller.WeatherController;
 import com.cc.yweather.eventbus.BusCase;
 import com.cc.yweather.eventbus.WeatherEvent;
 import com.cc.yweather.inter.OnItemClickListener;
@@ -51,6 +51,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
@@ -222,13 +223,8 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
     }
 
     @Override
-    public void getWeatherSuccess(Weather weather) {
-        Log.i("getWeatherSuccess", weather.getShowapi_res_code() + "/");
-        try {
-            weather.save();
-        } catch (Exception e) {
-            Log.i("getWeatherSuccess", e.getMessage());
-        }
+    public void getWeatherSuccess(JSONObject jsonObject, String lng, String lat) {
+        WeatherController.getController().setWeather(this, jsonObject, lng, lat);
     }
 
     @Override
@@ -247,7 +243,7 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
         double longitude = event.getAMapLocation().getLongitude(); // 经度
         double latitude = event.getAMapLocation().getLatitude(); // 纬度
         mIWeatherPresenter.getWeather(Constance.APP_ID, Constance.SIGN, "5", String.valueOf(longitude),
-                String.valueOf(latitude), "1", "1", "0", "1");
+                String.valueOf(latitude), "1", "1", "1", "1");
 
         // 经纬度转换成地址并保存
         Address address = LocateManager.getInstance(this).getAddressFromLat(this, latitude, longitude);
@@ -291,5 +287,9 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
     @Override
     public void refused(String permissionsGroup) {
         Toast.makeText(this, "权限已拒绝，在使用中可能会存在问题", Toast.LENGTH_LONG).show();
+    }
+
+    public String getShowingArea() {
+        return tvArea == null ? "青山湖区" : tvArea.getText().toString();
     }
 }

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.cc.yweather"
-        minSdkVersion 14
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -54,4 +54,9 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar' // 权限申请
+//    compile 'com.facebook.stetho:stetho:1.4.2' // 调试工具
+//    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.33'
+    compile 'com.github.Idtk:SmallChart:v0.1.1' // 折线图
 }

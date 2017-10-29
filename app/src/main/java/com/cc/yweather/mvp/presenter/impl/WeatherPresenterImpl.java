@@ -1,13 +1,14 @@
 package com.cc.yweather.mvp.presenter.impl;
 
-import android.util.Log;
-
-import com.cc.yweather.database.bean.Weather;
 import com.cc.yweather.mvp.api.WeatherRequest;
 import com.cc.yweather.mvp.presenter.IWeatherPresenter;
 import com.cc.yweather.mvp.view.IWeatherView;
 import com.cc.yweather.util.ErrorUtils;
-import com.cc.yweather.util.GsonConvert;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,7 +29,7 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
     }
 
     @Override
-    public void getWeather(String app_id, String sign, String from, String lng, String lat,
+    public void getWeather(String app_id, String sign, String from, final String lng, final String lat,
                            String moreDay, String index, String hourData, String alarm) {
         WeatherRequest.getWeatherApi()
                 .getWeather(app_id, sign, from, lng, lat, moreDay, index, hourData, alarm)
@@ -41,9 +42,12 @@ public class WeatherPresenterImpl implements IWeatherPresenter {
 
             @Override
             public void onNext(ResponseBody responseBody) {
-                Weather weather = GsonConvert.convert(responseBody, Weather.class);
-                Log.i("onNextW", weather.getShowapi_res_body().getTime() + "/");
-                mIWeatherView.getWeatherSuccess(weather);
+//                Weather weather = GsonConvert.convert(responseBody, Weather.class);
+                try {
+                    mIWeatherView.getWeatherSuccess(new JSONObject(new String(responseBody.bytes())), lng, lat);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
