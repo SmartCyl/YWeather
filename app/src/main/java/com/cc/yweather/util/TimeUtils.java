@@ -30,4 +30,36 @@ public class TimeUtils {
         c.set(Calendar.DATE, (int) (day + count));
         return new SimpleDateFormat(format, Locale.getDefault()).format(c.getTime());
     }
+
+    public static String getWeekByDigital(int weekday, int futureId) {
+        String week = null;
+        if (futureId == 1) { // futureId为1代表是今天
+            week = "今天";
+        } else {
+            switch (weekday) {
+                case 1:
+                    week = "星期一";
+                    break;
+                case 2:
+                    week = "星期二";
+                    break;
+                case 3:
+                    week = "星期三";
+                    break;
+                case 4:
+                    week = "星期四";
+                    break;
+                case 5:
+                    week = "星期五";
+                    break;
+                case 6:
+                    week = "星期六";
+                    break;
+                case 7:
+                    week = "星期日";
+                    break;
+            }
+        }
+        return week;
+    }
 }

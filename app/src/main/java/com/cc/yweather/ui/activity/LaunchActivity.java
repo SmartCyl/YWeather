@@ -25,7 +25,7 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
-        Observable.timer(5, TimeUnit.SECONDS, Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+        Observable.timer(1, TimeUnit.SECONDS, Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(@NonNull Long aLong) throws Exception {

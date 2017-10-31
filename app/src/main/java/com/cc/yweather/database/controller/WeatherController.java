@@ -8,6 +8,7 @@ import com.cc.yweather.database.bean.Future;
 import com.cc.yweather.database.bean.ThreeHourForecast;
 import com.cc.yweather.database.bean.Weather;
 import com.cc.yweather.manager.LocateManager;
+import com.cc.yweather.ui.activity.WeatherActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -158,5 +159,17 @@ public class WeatherController {
             }
         }
         weather.saveOrUpdate("area = ?", address == null ? "青山湖区" : address.getSubLocality());
+    }
+
+    // 获取指定weather_id下的所有未来7天天气信息
+    public List<Future> getFutures(int weatherId) {
+        return DataSupport.where("weather_id = ?", String.valueOf(weatherId)).order("futureId").find(Future.class);
+    }
+
+    // 获取指定区域下的所有天气信息
+    public List<Weather> getWeathers(Context context) {
+        String showingArea = context == null ? "青山湖区" :
+                ((WeatherActivity) context).getShowingArea();
+        return DataSupport.where("area = ?", showingArea).find(Weather.class);
     }
 }

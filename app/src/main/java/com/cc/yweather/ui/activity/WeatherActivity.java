@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,6 +52,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 import org.litepal.LitePal;
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +80,7 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
     private WeatherPagerAdapter pagerAdapter;
     private IWeatherPresenter mIWeatherPresenter;
     private Disposable mDisposable;
+    private int cityCount = 0;
 
     @SuppressLint("InlinedApi")
     @Override
@@ -102,7 +103,6 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
 
         mIWeatherPresenter = new WeatherPresenterImpl(this);
 
-        setIndicator();
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -121,9 +121,15 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
         toggle.syncState();
 
         setDrawerMenu();
-        if (pagerAdapter == null)
-            pagerAdapter = new WeatherPagerAdapter(getSupportFragmentManager());
-        vpWeather.setAdapter(pagerAdapter);
+        if (pagerAdapter == null) {
+            List<FocusCities> cities = DataSupport.findAll(FocusCities.class);
+            if (cities != null && cities.size() > 0) {
+                cityCount = cities.size();
+                pagerAdapter = new WeatherPagerAdapter(getSupportFragmentManager(), cities);
+                vpWeather.setAdapter(pagerAdapter);
+                setIndicator();
+            }
+        }
 
         vpWeather.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -162,11 +168,12 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
 
     // 圆点指示器
     private void setIndicator() {
+        if (cityCount == 0) return;
         if (llIndicator == null) llIndicator = (LinearLayout) findViewById(R.id.ll_indicator);
         llIndicator.removeAllViews();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10, 10);
         params.gravity = Gravity.CENTER;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < cityCount; i++) {
             if (i < 5) params.rightMargin = 20;
             IndicatorView view = new IndicatorView(this);
             if (vpWeather == null) vpWeather = (ViewPager) findViewById(R.id.vp_weather);
@@ -257,8 +264,6 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
                 if (!locateArea.equals(currArea)) {
                     // 提示是否切换
                     CityController.getController().saveCity(address.getAdminArea(), address.getLocality(), address.getSubLocality(), true);
-                    Log.i("getLocation", currentCity.getProvince() + " " + currentCity.getCity() + " " + currentCity.getArea() + " " +
-                            currentCity.isCurrent() + " " + currentCity.getId());
                 }
             }
         }
@@ -275,7 +280,6 @@ public class WeatherActivity extends AppCompatActivity implements OnItemClickLis
 
     @Override
     public void grant(String permission) {
-        Log.i("grant", permission);
         if (permission.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             LitePal.getDatabase();
         } else if (permission.equals(Manifest.permission.ACCESS_COARSE_LOCATION) ||
