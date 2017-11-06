@@ -2,7 +2,6 @@ package com.cc.yweather.database.controller;
 
 import android.content.Context;
 import android.location.Address;
-import android.util.Log;
 
 import com.cc.yweather.database.bean.Future;
 import com.cc.yweather.database.bean.ThreeHourForecast;
@@ -129,7 +128,6 @@ public class WeatherController {
             future.setWeekday(f.optInt("weekday"));
             future.setFutureId(i);
 
-            Log.i("setWeather", weatherId + " - " + future.getFutureId());
             future.saveOrUpdate("weather_id = ? and futureId = ?",
                     String.valueOf(weatherId), String.valueOf(i));
             weather.getFutures().add(future);
@@ -171,5 +169,12 @@ public class WeatherController {
         String showingArea = context == null ? "青山湖区" :
                 ((WeatherActivity) context).getShowingArea();
         return DataSupport.where("area = ?", showingArea).find(Weather.class);
+    }
+
+    public List<ThreeHourForecast> getForecasts(Context context) {
+        List<Weather> weathers = WeatherController.getController().getWeathers(context);
+        if (weathers == null || weathers.size() == 0) return null;
+        int weatherId = weathers.get(0).getId();
+        return DataSupport.where("weather_id = ?", String.valueOf(weatherId)).order("forecastId").find(ThreeHourForecast.class);
     }
 }

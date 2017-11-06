@@ -52,7 +52,7 @@ public class TemperatureView extends View {
     /**
      * 坐标点半径
      */
-    private static final int POINT_RADIUS = 3;
+    private int POINT_RADIUS = 3;
     /**
      * 坐标点文字颜色
      */
@@ -98,6 +98,8 @@ public class TemperatureView extends View {
      */
     private Point[] points;
 
+    private boolean isForecast;
+
     /**
      * 构造函数
      */
@@ -130,6 +132,15 @@ public class TemperatureView extends View {
      */
     public void setItems(ArrayList<TemperatureItem> items) {
         this.items = items;
+    }
+
+    public void setForecast(boolean isForecast) {
+        this.isForecast = isForecast;
+    }
+
+    // 圆点半径
+    public void setPointRadius(int radius) {
+        POINT_RADIUS = radius;
     }
 
     /**
@@ -212,12 +223,15 @@ public class TemperatureView extends View {
         paint.setStrokeWidth(0);
         paint.setTextSize(DensityUtils.dip2px(context, X_VALUE_TEXTSIZE));
         paint.setTextAlign(Paint.Align.CENTER);
-        int period = (width - 2 * hosMargin) / items.size(); //平均间隔
-        int startX = hosMargin * 3;
+        int startX = hosMargin * 2;
+        int period = (width - 2 * startX) / (items.size() - 1); //平均间隔
         xPoints = new ArrayList<>();
         for (TemperatureItem item : items) {
             xPoints.add(startX);
-            canvas.drawText(item.getxValue(), startX, getHeight() - 20, paint);
+            canvas.drawText(item.getxValue(), startX, 3 * getHeight() / 4 + 20, paint);
+            if (isForecast) { // 绘制三小时天气阴晴状况
+                canvas.drawText(item.getWeather(), startX, getHeight(), paint);
+            }
             startX += period;
         }
     }

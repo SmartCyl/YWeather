@@ -9,6 +9,8 @@ public class TemperatureItem {
     private int yValue;
     private String url; // 图片的UTL
     private String water; // 降水量
+    private String clock; // 三小时预报时间
+    private String weather; // 三小时预报的天气状况
 
     // 画折线图
     public TemperatureItem(String xValue, int yValue) {
@@ -22,8 +24,15 @@ public class TemperatureItem {
         this.xValue = xValue;
     }
 
+    // 降水量
     public TemperatureItem(String water) {
         this.water = water;
+    }
+
+    public TemperatureItem(String xValue, int yValue, String weather) {
+        this.xValue = xValue;
+        this.yValue = yValue;
+        this.weather = weather;
     }
 
     public String getxValue() {
@@ -56,5 +65,21 @@ public class TemperatureItem {
 
     public void setWater(String water) {
         this.water = water;
+    }
+
+    public String getClock() {
+        return clock;
+    }
+
+    public void setClock(String clock) {
+        this.clock = clock;
+    }
+
+    public String getWeather() {
+        return weather;
+    }
+
+    public void setWeather(String weather) {
+        this.weather = weather;
     }
 }

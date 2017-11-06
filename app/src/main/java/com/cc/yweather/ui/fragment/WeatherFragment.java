@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.cc.yweather.R;
 import com.cc.yweather.app.Type;
 import com.cc.yweather.database.bean.Future;
+import com.cc.yweather.database.bean.ThreeHourForecast;
 import com.cc.yweather.database.bean.Weather;
 import com.cc.yweather.database.controller.WeatherController;
 import com.cc.yweather.ui.widget.TemperatureItem;
@@ -34,6 +35,8 @@ public class WeatherFragment extends Fragment {
     TemperatureView dayTemperatureView;
     @BindView(R.id.nightTemperatureView)
     TemperatureView nightTemperatureView;
+    @BindView(R.id.threeHourForecast)
+    TemperatureView threeHourForecast; // 三小时预报
     @BindView(R.id.iv_weather_icon)
     ImageView ivWeatherIcon;
     @BindView(R.id.tv_weather_status)
@@ -62,6 +65,9 @@ public class WeatherFragment extends Fragment {
 
         dayTemperatureView.setItems(getTemperatures(Type.DAY));
         nightTemperatureView.setItems(getTemperatures(Type.NIGHT));
+        threeHourForecast.setForecast(true); // 绘制三小时天气
+        threeHourForecast.setPointRadius(8);
+        threeHourForecast.setItems(getForecasts());
         WeatherStatus.getManager().showWeatherStatus(getActivity(), llWeatherStatus, getTemperatures(Type.WEATHER_STATUS));
         WeatherStatus.getManager().showWater(getActivity(), llWater, getTemperatures(Type.WATER));
         showWeather(); // 显示今日天气图标和天气状况
@@ -100,6 +106,17 @@ public class WeatherFragment extends Fragment {
             } else if (type == Type.WATER) {
                 items.add(new TemperatureItem(future.getWater()));
             }
+        }
+        return items;
+    }
+
+    private ArrayList<TemperatureItem> getForecasts() {
+        List<ThreeHourForecast> forecasts = WeatherController.getController().getForecasts(getActivity());
+        if (forecasts == null || forecasts.size() == 0) return null;
+        ArrayList<TemperatureItem> items = new ArrayList<>();
+        for (ThreeHourForecast forecast : forecasts) {
+            items.add(new TemperatureItem(forecast.getHour().split("-")[0].split("时")[0] + ":00",
+                    Integer.valueOf(forecast.getTemperature()), forecast.getWeather()));
         }
         return items;
     }

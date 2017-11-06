@@ -2,7 +2,6 @@ package com.cc.yweather.ui.widget;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,7 +31,6 @@ public class WeatherStatus {
     }
 
     public void showWeatherStatus(Context context, LinearLayout linearLayout, ArrayList<TemperatureItem> items) {
-        Log.i("showWeatherStatus", context + "");
         if (context == null || items == null || items.size() == 0) return;
         linearLayout.removeAllViews();
         for (TemperatureItem item : items) {

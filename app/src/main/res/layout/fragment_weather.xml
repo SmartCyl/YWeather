@@ -44,8 +44,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:text="20"
                 android:textColor="@color/white"
                 android:textSize="100sp"/>
+
+            <TextView
+                android:id="@+id/tv_ssd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/tv_temperature"
+                android:text="℃"
+                android:textColor="@color/white"
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/tv_wind"
@@ -53,7 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/tv_temperature"
                 android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@id/tv_temperature"
+                android:layout_toRightOf="@id/tv_ssd"
+                android:singleLine="true"
                 android:textColor="@color/line_grey"/>
         </RelativeLayout>
 
@@ -145,6 +157,16 @@
             android:textColor="@color/line_grey"
             android:textSize="14sp"/>
 
+        <com.cc.yweather.ui.widget.TemperatureView
+            android:id="@+id/threeHourForecast"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/white"/>
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

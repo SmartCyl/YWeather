@@ -9,4 +9,5 @@ public enum Type {
     NIGHT, // 晚上温度
     WEATHER_STATUS, // 天气状态
     WATER, // 降水量
+    THREE_HOUR_FORECAST // 三小时预报
 }
