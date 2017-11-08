@@ -3,10 +3,12 @@ package com.cc.yweather.database.controller;
 import android.content.Context;
 import android.location.Address;
 
+import com.cc.yweather.R;
 import com.cc.yweather.database.bean.Future;
 import com.cc.yweather.database.bean.ThreeHourForecast;
 import com.cc.yweather.database.bean.Weather;
 import com.cc.yweather.manager.LocateManager;
+import com.cc.yweather.mvp.model.LifeInfo;
 import com.cc.yweather.ui.activity.WeatherActivity;
 
 import org.json.JSONArray;
@@ -14,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -176,5 +179,20 @@ public class WeatherController {
         if (weathers == null || weathers.size() == 0) return null;
         int weatherId = weathers.get(0).getId();
         return DataSupport.where("weather_id = ?", String.valueOf(weatherId)).order("forecastId").find(ThreeHourForecast.class);
+    }
+
+    public List<LifeInfo> getLifeInfo(Context context) {
+        List<Weather> weathers = getWeathers(context);
+        if (weathers == null || weathers.size() == 0) return null;
+        Weather weather = weathers.get(0);
+        List<LifeInfo> list = new ArrayList<>();
+        list.add(new LifeInfo(R.mipmap.icon_life_beauty, "化妆指数 " + weather.getBeautyTitle(), weather.getBeautyDesc()));
+        list.add(new LifeInfo(R.mipmap.icon_life_cloth, "穿衣指数 " + weather.getClothesTitle(), weather.getClothesDesc()));
+        list.add(new LifeInfo(R.mipmap.icon_life_ls, "晾晒指数 " + weather.getLsTitle(), weather.getLsDesc()));
+        list.add(new LifeInfo(R.mipmap.icon_life_shopping, "购物指数 " + weather.getShoppingTitle(), weather.getShoppingDesc()));
+        list.add(new LifeInfo(R.mipmap.icon_life_sports, "运动指数 " + weather.getSportsTitle(), weather.getSportsDesc()));
+        list.add(new LifeInfo(R.mipmap.icon_life_uv, "紫外线强度指数 " + weather.getUvTitle(), weather.getUvDesc()));
+        list.add(new LifeInfo(R.mipmap.icon_life_wash_car, "洗车指数 " + weather.getWashCarTitle(), weather.getWashCarDesc()));
+        return list;
     }
 }

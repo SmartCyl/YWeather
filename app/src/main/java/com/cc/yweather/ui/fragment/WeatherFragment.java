@@ -4,6 +4,8 @@ package com.cc.yweather.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.cc.yweather.database.bean.Future;
 import com.cc.yweather.database.bean.ThreeHourForecast;
 import com.cc.yweather.database.bean.Weather;
 import com.cc.yweather.database.controller.WeatherController;
+import com.cc.yweather.ui.adapter.LifeAdapter;
 import com.cc.yweather.ui.widget.AirQualityView;
 import com.cc.yweather.ui.widget.TemperatureItem;
 import com.cc.yweather.ui.widget.TemperatureView;
@@ -74,6 +77,8 @@ public class WeatherFragment extends Fragment {
     TextView tvCo; // 一氧化碳
     @BindView(R.id.tv_o3)
     TextView tvO3; // 臭氧
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
 
     public static WeatherFragment getInstance() {
         return new WeatherFragment();
@@ -83,7 +88,11 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
         ButterKnife.bind(this, view);
+        init();
+        return view;
+    }
 
+    private void init() {
         dayTemperatureView.setItems(getTemperatures(Type.DAY));
         nightTemperatureView.setItems(getTemperatures(Type.NIGHT));
         threeHourForecast.setForecast(true); // 绘制三小时天气
@@ -92,8 +101,20 @@ public class WeatherFragment extends Fragment {
         WeatherStatus.getManager().showWeatherStatus(getActivity(), llWeatherStatus, getTemperatures(Type.WEATHER_STATUS));
         WeatherStatus.getManager().showWater(getActivity(), llWater, getTemperatures(Type.WATER));
         showWeather(); // 显示今日天气图标和天气状况
+        initLifeRecycler();
+    }
 
-        return view;
+    // 显示生活指数
+    private void initLifeRecycler() {
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        recyclerView.setLayoutManager(manager);
+        LifeAdapter adapter = new LifeAdapter(getActivity(), WeatherController.getController().getLifeInfo(getActivity()));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override

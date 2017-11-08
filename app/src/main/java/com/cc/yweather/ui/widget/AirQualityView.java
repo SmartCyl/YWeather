@@ -26,6 +26,7 @@ public class AirQualityView extends View {
     private int width, height;
     private String aqi; // 空气质量值
     private String quality; // 空气质量描述
+    private float currentAqi = 0F; // 动画（当前的aqi值）
 
     public AirQualityView(Context context) {
         this(context, null);
@@ -104,8 +105,14 @@ public class AirQualityView extends View {
 
     // 绘制弧度
     private void drawSector(Canvas canvas) {
+//        if (currentAqi > Float.valueOf(aqi)) return;
+//        Log.i("drawSector", CIRCLE_WIDTH / 2 + "/" + (width - CIRCLE_WIDTH / 2 + "/" + (height - CIRCLE_WIDTH / 2)));
         RectF rectF = new RectF(CIRCLE_WIDTH / 2, CIRCLE_WIDTH / 2, width - CIRCLE_WIDTH / 2, height - CIRCLE_WIDTH / 2);
         canvas.drawArc(rectF, -90, Float.valueOf(aqi) / 600 * 360, true, sectorPaint);
+//        currentAqi++;
+//        invalidate();
+//        currentAqi++;
+//        postInvalidate();
     }
 
     // 绘制圆环
